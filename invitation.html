@@ -459,6 +459,32 @@
                 }
             }
             createFireflies();
+
+            // Đom đóm né chuột
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+                document.querySelectorAll('.firefly').forEach(firefly => {
+                    const rect = firefly.getBoundingClientRect();
+                    const fx = rect.left + rect.width / 2;
+                    const fy = rect.top + rect.height / 2;
+                    const dx = fx - mouseX;
+                    const dy = fy - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // Nếu chuột lại gần trong bán kính 80px thì đom đóm sẽ né ra xa
+                    if (distance < 80) {
+                        const angle = Math.atan2(dy, dx);
+                        const moveX = Math.cos(angle) * 40;
+                        const moveY = Math.sin(angle) * 40;
+                        firefly.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                        firefly.style.transition = 'transform 0.3s';
+                    } else {
+                        firefly.style.transform = '';
+                        firefly.style.transition = 'transform 0.8s';
+                    }
+                });
+            });
         });
     </script>
 </body>
