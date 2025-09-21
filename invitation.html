@@ -10,7 +10,7 @@
 
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
-            background: linear-gradient(to bottom right, #fca5a5, #f9a8d4, #c084fc);
+            background: #000; /* Nền tối đen */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,7 +22,7 @@
         .invitation-card {
             max-width: 800px;
             width: 100%;
-            background-color: white;
+            background: linear-gradient(135deg, #386e48 0%, #ffe4f1 100%);
             border-radius: 2rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
@@ -41,7 +41,7 @@
 
         .invitation-header {
             font-family: 'Dancing Script', cursive;
-            color: #d82b60;
+            color: #22d3ee; /* Đổi sang màu xanh ngọc */
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
@@ -104,7 +104,7 @@
         .invitation-image {
             width: 100%;
             height: 250px;
-            background-image: url('graduation.jpg');
+            background-image: url('jack.jpg');
             background-size: contain; /* Sửa lại để ảnh không bị crop */
             background-repeat: no-repeat; /* Không lặp lại ảnh */
             background-position: center;
@@ -284,8 +284,8 @@
         </audio>
 
         <!-- Invitation Image -->
-        <div class="relative w-full h-64 rounded-2xl mb-6 overflow-hidden" id="image-slider">
-            <img id="slider-img" src="graduation.jpg" class="w-full h-full object-contain rounded-2xl transition-all duration-500" alt="Ảnh tốt nghiệp">
+        <div class="relative w-full h-80 rounded-2xl mb-6 overflow-hidden" id="image-slider">
+            <img id="slider-img" src="jack.jpg" class="w-full h-full object-contain rounded-2xl transition-all duration-500" alt="Ảnh tốt nghiệp">
             <button id="prev-img" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-3 py-1 shadow hover:bg-opacity-100">&lt;</button>
             <button id="next-img" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white bg-opacity-70 rounded-full px-3 py-1 shadow hover:bg-opacity-100">&gt;</button>
         </div>
@@ -321,6 +321,11 @@
                     <svg class="w-7 h-7 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <p><strong>Địa điểm:</strong> Đại học Bách Khoa Hà Nội</p>
                 </div>
+                <!-- Số điện thoại -->
+                <div class="info-item flex items-center justify-center text-gray-800">
+                    <svg class="w-7 h-7 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zm10-10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zm0 10a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <p><strong>Số điện thoại:</strong> 0862686417</p>
+                </div>
             </div>
 
             <p class="invitation-footer mt-8 text-gray-600 font-light italic">
@@ -349,12 +354,13 @@
             // Handle button click
             okButton.addEventListener('click', () => {
                 const name = nameInput.value.trim();
-                if (name) {
-                    invitationText.innerHTML = `Trân trọng kính mời bạn <span class="guest-name">${name}</span> đến tham dự buổi lễ tốt nghiệp của tôi.`;
-                } else {
-                    // Default behavior if no name is entered
-                    invitationText.innerHTML = `Trân trọng kính mời bạn đến tham dự buổi lễ tốt nghiệp của tôi.`;
+                if (!name) {
+                    nameInput.classList.add('border-red-500');
+                    nameInput.placeholder = 'Vui lòng nhập tên!';
+                    nameInput.focus();
+                    return; // Không cho đóng modal
                 }
+                invitationText.innerHTML = `Trân trọng kính mời bạn <span class="guest-name">${name}</span> đến tham dự buổi lễ tốt nghiệp của tôi.`;
                 modal.classList.remove('visible');
                 invitationCard.classList.remove('blurred');
 
@@ -363,12 +369,9 @@
                     const playPromise = audio.play();
                     if (playPromise !== undefined) {
                         playPromise.then(() => {
-                            // Autoplay started! Show pause button
                             playIcon.classList.add('hidden');
                             pauseIcon.classList.remove('hidden');
                         }).catch(error => {
-                            // Autoplay was prevented. Show play button and log error
-                            console.log("Autoplay was prevented by the browser. Please use the music button to start the music.", error);
                             playIcon.classList.remove('hidden');
                             pauseIcon.classList.add('hidden');
                         });
@@ -412,8 +415,8 @@
             let currentImg = 0;
             const sliderImg = document.getElementById('slider-img');
             const images = [
-                'graduation.jpg',
-                'jack.jpg'
+                'jack.jpg',
+                'graduation.jpg'
                 // Thêm tên các ảnh khác vào đây
             ];
 
@@ -441,7 +444,7 @@
 
             // Firefly Effect - Dynamically create fireflies
             function createFireflies() {
-                const firefliesCount = 50;
+                const firefliesCount = 250; // Tăng số lượng đom đóm
                 const body = document.body;
                 for (let i = 0; i < firefliesCount; i++) {
                     const firefly = document.createElement('div');
